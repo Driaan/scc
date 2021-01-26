@@ -4,7 +4,7 @@
 # Copyright (C) 2001-2004 Open Challenge B.V.
 # Copyright (C) 2004-2005 OpenEyeT Professional Services.
 # Copyright (C) 2005-2018 QNH.
-# Copyright (C) 2019 Siem Korteweg.
+# Copyright (C) 2019-2020 Siem Korteweg.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,8 @@
 #
 # Contact information: https://sourceforge.net/projects/sysconfcollect/support
 
-# SCC-release: 1.19.44
-# ID:          $Id: scc-wrapper.cgi 6217 2019-03-22 18:46:12Z siemkorteweg $
+# SCC-release: 1.20.33
+# ID:          $Id: scc-wrapper.cgi 6315 2020-05-03 19:32:55Z siemkorteweg $
 
 
 ProgName=${0##*/};			export ProgName

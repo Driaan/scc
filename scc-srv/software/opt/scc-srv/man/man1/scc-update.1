@@ -10,7 +10,7 @@
 .SH  RELEASE
 .nf
 
-	scc-srv	1.19.44
+	scc-srv	1.20.33
 
 .SH  SYNOPSIS
 .nf
@@ -124,7 +124,7 @@
 
 	The contents of a scc-auto-realm.conf file are:
 
-		<action>:<hostname>:<domain>:<OS>:<OS-release>
+		<action>:<hostname>:<domain>:<OS>:<OS-release>:<label>
 
 	Where <action> is either "add" or "skip". The other fields are regular expressions. 
 	Check the file scc-summary.data for the current values in the All realm.
@@ -132,18 +132,18 @@
 
 	To add all HP-UX hosts to a realm specific for the OS, use the following config:
 
-		add:.*:.*:HP-UX:.*
+		add:.*:.*:HP-UX:.*:.*
 
 	To add all hosts except those in development domains, use:
 
-		skip:.*:.*development.*:.*:.*
-		add:.*:.*:.*:.*
+		skip:.*:.*development.*:.*:.*:.*
+		add:.*:.*:.*:.*:.*
 
 	Processing of a host stops when a match is found in the config file.
 
 	To add all hosts where the domain cannot be determined (or is absent), use:
 
-		add:.*::.*:.*
+		add:.*::.*:.*:.*
 
 	All empty entries represent absent data.
 
@@ -152,7 +152,7 @@
 
 	scc-update is free software under the terms of the GNU General Public 
 	License. Copyright (C) 2001-2004 Open Challenge B.V.,
-	2004-2005 OpenEyeT Professional Services, 2005-2018 QNH, 2019 Siem Korteweg.
+	2004-2005 OpenEyeT Professional Services, 2005-2018 QNH, 2019-2020 Siem Korteweg.
 
 .SH  SEE ALSO
 .nf
@@ -165,5 +165,5 @@
 .SH  VERSION
 .nf
 
-	$Revision: 6217 $
+	$Revision: 6315 $
 

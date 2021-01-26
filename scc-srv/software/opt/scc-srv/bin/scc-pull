@@ -4,7 +4,7 @@
 # Copyright (C) 2001-2004 Open Challenge B.V.
 # Copyright (C) 2004-2005 OpenEyeT Professional Services.
 # Copyright (C) 2005-2018 QNH.
-# Copyright (C) 2019 Siem Korteweg.
+# Copyright (C) 2019-2020 Siem Korteweg.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,8 @@
 #
 # Contact information: https://sourceforge.net/projects/sysconfcollect/support
 
-# SCC-release: 1.19.44
-# ID:          $Id: scc-pull 6217 2019-03-22 18:46:12Z siemkorteweg $
+# SCC-release: 1.20.33
+# ID:          $Id: scc-pull 6315 2020-05-03 19:32:55Z siemkorteweg $
 
 
 ProgName=${0##*/};			export ProgName
@@ -52,8 +52,9 @@ fi
 
 export CLIENT_FILE=${SCC_TMP}/scc_pull_$$
 export NOTIFY_FILE=${SCC_TMP}/scc_notify_$$
+export BATCH_FILE=${SCC_TMP}/scc_sftp_batch_$$
 hostname >${NOTIFY_FILE}
-trap 'rm -f ${CLIENT_FILE} ${NOTIFY_FILE}' 0
+trap 'rm -f ${CLIENT_FILE} ${NOTIFY_FILE} ${BATCH_FILE}' 0
 
 log_file="${SCC_DATA}/log/scc-pull.log"
 
@@ -95,6 +96,7 @@ SYNTAX="Syntax error, use: ${ProgName} [ -B <bin> ]
 	[ -n ]
 	[ -N ]
 	[ -o <option> ]
+	[ -O <user> ]
 	[ -p <prog> ]
 	[ -P <port> ]
 	[ -s <dest> ]
@@ -119,7 +121,7 @@ delay=600
 do_run=1
 client_options=" -p pull "
 
-dest=${SCC_DATA}/transfer/cp
+dest=""
 port=22
 
 MISSING_OPT_ARG="${ProgName}: Syntax error, missing argument for option:"
@@ -130,6 +132,7 @@ prog="ssh"
 # This feature has been suggested by Sven Weise.
 remote_user="root"
 user="$(id | sed -e 's/).*//' -e 's/.*(//')"
+owner=""
 if [ "${user}" != "root" ]
 then
 	remote_user="${user}"
@@ -246,7 +249,7 @@ do
 
 	-p)	[ -z "${2:-}" ] && echo "${MISSING_OPT_ARG}: ${1}" >&2 && exit 1
 		case "${2}" in
-		ssh|rsh)	prog="${2}";;
+		ssh|rsh|sftp)	prog="${2}";;
 		ovdeploy)	if [ ! -x /opt/OV/bin/ovdeploy ]
 				then
 					echo "${ProgName}: cannot find ovdeploy" >&2
@@ -267,17 +270,18 @@ do
 		;;
 
 	-s)	[ -z "${2:-}" ] && echo "${MISSING_OPT_ARG}: ${1}" >&2 && exit 1
-		if [ ! -d "${2}" ]
-		then
-			echo "${ProgName}: cannot find directory ${2}" >&2
-			exit 2
-		fi
 		dest="${2}"
 		shift 2
 		;;
 
 	-m|-e|-c)	[ -z "${2:-}" ] && echo "${MISSING_OPT_ARG}: ${1}" >&2 && exit 1
 		client_options="${client_options} ${1} \"${2}\""
+		shift 2
+		;;
+
+	-O)	[ -z "${2:-}" ] && echo "${MISSING_OPT_ARG}: ${1}" >&2 && exit 1
+		owner=${2}
+		upstream=1
 		shift 2
 		;;
 
@@ -295,6 +299,27 @@ do
 		exit 1;;
 	esac
 done
+
+if [ "${dest}" != "" ]
+then
+	if [ ! -d "${dest}" ]
+	then
+		if [ "${owner}" ]
+		then
+			mkdir -p "${dest}"
+		else
+			echo "${ProgName}: cannot find directory ${dest}" >&2
+			exit 2
+		fi
+	fi
+	if [ "${owner}" ]
+	then
+		chown "${owner}" "${dest}"
+	fi
+else
+	dest=${SCC_DATA}/transfer/cp
+	# default destination, should exist, do not chown to avoid interference with rpm/package.
+fi
 
 if [ ! -s ${CLIENT_FILE} ]
 then
@@ -314,6 +339,16 @@ ssh_options="${ssh_options} ${ssh_config} "
 if [ ${delay} -gt 0 ]
 then
 	client_options="${client_options} -d $(( delay / 2 ))"
+fi
+
+if [ "${prog}" = "sftp" ]
+then
+	if [ ${do_run} -eq 1 ]
+	then
+		echo "warning: sftp does not support running client"
+		do_run=0
+		delay=0
+	fi
 fi
 
 if [ ${do_run} -eq 1 ]
@@ -491,6 +526,22 @@ do
 		done
 		;;
 
+	sftp)	{
+			# All actions in one go:
+			echo "cd ${client_data_dir}"
+			echo "lcd ${dest}"
+			echo "mget scc.*.signal"
+			echo "mget scc.*.data"
+			if [ ${keep} -eq 0 ]
+			then
+				echo "rm scc.*.signal"
+				echo "rm scc.*.data"
+			fi
+		} >${BATCH_FILE}
+
+		${timeout} sftp -b ${BATCH_FILE} -P ${port} ${ssh_options} ${remote_user}@${client} >/dev/null 2>/dev/null
+		;;
+
 	esac
 	pull_log "system ${client} end data retrieval"
 done
@@ -510,6 +561,14 @@ then
 		pull_log "start scc-update"
 		scc-update
 		pull_log "end scc-update"
+	fi
+else
+	if [ "${owner}" ]
+	then
+		(
+			cd "${dest}"
+			chown "${owner}" scc.*.data scc.*.signal
+		)
 	fi
 fi
 

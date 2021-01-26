@@ -1,0 +1,46 @@
+Description
+===========
+This file describes the server part of System Configuration Collector aka SCC.
+
+Purpose
+=======
+The purpose of the SCC server is to combine configuration data from SCC clients and
+provide summaries and a web-interface to search and compare configuration data.
+
+Installation and operation
+==========================
+Refer to scc-srv(5) and http://sysconfcollect.sourceforge.net/architecture.html for details.
+To access the manual page after installation, add /opt/scc-srv/man to $MANPATH.
+
+Development and build
+=====================
+The remainder of this file describes the development environment of the SCC server.
+Download and unpack the src.tar.gz for local developments.
+
+Directories
+===========
+The development environment consists of the following directories:
+- pkg_files	all files required during the production and installation of the software
+- software	target for all packages that are produced
+- test    	bats tests
+
+The base directory contains the main scripts, pages and help pages of the server part of SCC.
+
+Building
+========
+The source distribution of the software is produced by invoking the build script.
+As this script requires root permissions, you can use sudo to activate it.
+This source distribution is the base for the production of all other package formats.
+They can be produced by invoking the build script with the --all option. This option
+also requires root permissions. All produced packages can be found in the software 
+subdirectory.
+
+Testing
+=======
+Install bats:
+
+	git clone https://github.com/bats-core/bats-core.git
+	cd bats-core
+	sudo ./install.sh /usr/local
+
+Run all tests: sudo bats tests/

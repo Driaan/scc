@@ -14,7 +14,7 @@
 <H2> RELEASE</H2>
 <PRE>
 
-	scc-srv	1.19.44
+	scc-srv	1.20.33
 
 </PRE>
 <H2> SYNOPSIS</H2>
@@ -22,7 +22,7 @@
 
 	scc-pull [ -B &lt;bin&gt; ] [ -D &lt;data&gt; ] [ -d &lt;delay&gt; ] [ -I &lt;ident&gt; ] [ -P &lt;port&gt; ]
 		[ -c &lt;remark&gt; ] [ -n ] [ -N ] [ -p &lt;prog&gt; ] [ -s &lt;dest&gt; ] [ -k ] [ -U ]
-		[ -f ] [ -e &lt;module&gt; ] [ -m &lt;max&gt; ] [ -u &lt;user&gt; ]
+		[ -f ] [ -e &lt;module&gt; ] [ -m &lt;max&gt; ] [ -u &lt;user&gt; ] [ -O &lt;user&gt; ]
 		[ -R &lt;realm&gt; | -F &lt;file&gt; | -L &lt;list&gt; ]+
 		[ -o &lt;option&gt; ]
 
@@ -30,7 +30,7 @@
 <H2> DESCRIPTION</H2>
 <PRE>
 
-	This program pulls scc-data from clients using ssh/rsh. This is done
+	This program pulls scc-data from clients using ssh/sftp/rsh. This is done
 	by (optional) executing scc on clients and pulling the files to the server. 
 	Finally scc-update is called to update the realms with the new files.
 	By default, scc is started in the background on the clients. The
@@ -41,11 +41,11 @@
 	can use a separate scc-srv to act as a proxy. Use the -U option for this
 	program to avoid that scc-update is called. The retrieved data can be 
 	pushed (with scc client) to or pulled (with scc-srv) from an upstream
-	scc-srv site.
+	scc-srv site. Please refer to <A HREF="scc-srv-5.html">scc-srv(5)</A> for a more detailled description.
 
 	In case of errors when running scc on the clients, the stdout and stderr
-	is recorded on the clients in the file /var/opt/scc/data/transfer/scc-pull.log
-	When the -D option is used, the path changed accordingly.
+	are recorded on the clients in the file /var/opt/scc/data/transfer/scc-pull.log
+	When the -D option is used, the path changes accordingly.
 
 	Doug Probst provided the initial version of this program.
 
@@ -54,14 +54,16 @@
 <PRE>
 
 	The following options control the execution/retrieval:
-	-B &lt;bin&gt;        Use &lt;bin&gt; to start scc on the clients. By default the
+	-B &lt;bin&gt;        Use &lt;bin&gt; to start scc on all clients. By default the
 	                path is based on /opt/scc-srv/bin, where scc-srv is
 	                replaced by scc.
 	-c &lt;remark&gt;     Add a remark to the logbook(s), indicating a "specific" 
 	                reason to run scc.
-	-D &lt;data&gt;       Use &lt;data&gt; to retrieve the data from the clients. By
+	-D &lt;data&gt;       Use &lt;data&gt; to retrieve the data from all clients. By
 	                default this is based on /var/opt/scc-srv/data/transfer,
 	                where scc-srv is replaced by scc.
+	                This can be determined per client by searching in its
+	                central snapshot for &#39;fix:general::data:&#39;.
 	-d &lt;delay&gt;      After starting scc on the clients in the background,
 	                wait &lt;delay&gt; seconds before retrieving the files. 
 	                Thus, the delay should be long enough for all clients
@@ -86,12 +88,12 @@
 	-o ssh_opt &lt;f&gt;  Use file &lt;f&gt; for additional ssh and scp options (-F &lt;f&gt;).
 	                Default ssh config file via config file scc.conf.
 	-p &lt;prog&gt;       Use &lt;prog&gt; to communicate with the client. Supported
-	                values are: ssh, rsh and ovdeploy. By default ssh is used
-	                with a 30 second connection timeout. Without tty,
+	                values are: ssh, sftp, rsh and ovdeploy. By default ssh is 
+	                used with a 30 second connection timeout. Without tty,
 	                batchmode is used.
 	                Test "-p ssh" option in an interactive ssh session to 
 	                capture messages and to check for required passwords.
-	-P &lt;port&gt;       Port to use for ssh and scp. Default value is 22.
+	-P &lt;port&gt;       Port to use for ssh, sftp and scp. Default value is 22.
 	-s &lt;dest&gt;       Full path of local destination directory for the copied
 	                files, by default /var/opt/scc-srv/data/transfer/cp.
 	-u &lt;user&gt;       Files are retrieved by &lt;user&gt;, not by root. Remote start
@@ -101,6 +103,8 @@
 	                done by user &lt;user&gt; when this option is used. When the 
 	                program is not run by root, the option -u &lt;user&gt; are 
 	                implied. This option is also passed to the client.
+	-O &lt;user&gt;       Owner of pulled files and &lt;dest&gt; directory, implies -U
+	                option. An absent directory &lt;dest&gt; is created.
 	-U              Do not call scc-update to transfer the retrieved data 
 	                to a realm. Leave the data for an upstream scc-srv.
 
@@ -192,7 +196,7 @@
 
 	scc-pull is free software under the terms of the GNU General Public 
 	License. Copyright (C) 2001-2004 Open Challenge B.V.,
-	2004-2005 OpenEyeT Professional Services, 2005-2018 QNH, 2019 Siem Korteweg.
+	2004-2005 OpenEyeT Professional Services, 2005-2018 QNH, 2019-2020 Siem Korteweg.
 
 </PRE>
 <H2> EXAMPLES</H2>
@@ -235,7 +239,7 @@
 <H2> VERSION</H2>
 <PRE>
 
-	$Revision: 6217 $
+	$Revision: 6315 $
 
 </PRE>
 </BODY></HTML>

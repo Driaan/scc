@@ -4,7 +4,7 @@
 # Copyright (C) 2001-2004 Open Challenge B.V.
 # Copyright (C) 2004-2005 OpenEyeT Professional Services.
 # Copyright (C) 2005-2018 QNH.
-# Copyright (C) 2019 Siem Korteweg.
+# Copyright (C) 2019-2020 Siem Korteweg.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,8 @@
 #
 # Contact information: https://sourceforge.net/projects/sysconfcollect/support
 
-# SCC-release: 1.19.44
-# ID:          $Id: scc-update 6217 2019-03-22 18:46:12Z siemkorteweg $
+# SCC-release: 1.20.33
+# ID:          $Id: scc-update 6315 2020-05-03 19:32:55Z siemkorteweg $
 
 
 ProgName=${0##*/};			export ProgName
@@ -158,7 +158,10 @@ postinstall()
 			# Add the selinux settings to survive a file system relabel (suggested by Jouk Hettema).
 			# Use three separate calls to support semanage for CentOS 5.
 			/usr/sbin/semanage fcontext --add --type httpd_sys_content_t		"${SCC_WWW}(/.*)?"
-			/usr/sbin/semanage fcontext --add --type httpd_sys_script_exec_t	"${SCC_WWW}/All/cgi-bin(/.*)?"
+			for cgi in ${SCC_WWW}/*/cgi-bin
+			do
+				/usr/sbin/semanage fcontext --add --type httpd_sys_script_exec_t	"${cgi}(/.*)?"
+			done
 			/usr/sbin/semanage fcontext --add --type httpd_sys_content_t		"${SCC_CONF}(/.*)?"
 			/usr/sbin/semanage fcontext --add --type mail_spool_t			"${SCC_DATA}/transfer/mail(/.*)?"
 
@@ -171,10 +174,16 @@ postinstall()
 	then
 		# During an upgrade, the Selinux context is reset.
 		/usr/bin/chcon -R system_u:object_r:httpd_sys_content_t:s0	${SCC_WWW}			2>/dev/null
-		/usr/bin/chcon -R system_u:object_r:httpd_sys_script_exec_t:s0	${SCC_WWW}/All/cgi-bin		2>/dev/null
+		for cgi in ${SCC_WWW}/*/cgi-bin
+		do
+			/usr/bin/chcon -R system_u:object_r:httpd_sys_script_exec_t:s0	"${cgi}"		2>/dev/null
+		done
 		/usr/bin/chcon -R system_u:object_r:httpd_sys_content_t:s0	${SCC_CONF}			2>/dev/null
 		/usr/bin/chcon -R system_u:object_r:mail_spool_t:s0 		${SCC_DATA}/transfer/mail	2>/dev/null
 	fi
+
+	echo "NOTE:    New version of scc-srv is installed."
+	echo "NOTE:    Please refer to /opt/scc-srv/doc/README for more details"
 
 	exit 0
 }
@@ -210,20 +219,20 @@ scc_auto_realm()
 	# 3: Check and add/remove host from realm
 
 	# Syntax of this file is:
-	# "general_data":<host>:<model>:<os>:<release>:<last_day>:<last_time>:<domain>:<runtime>:<size>:<virtualization>
-	awk -F: '{ printf( "%s:%s:%s:%s\n", $2, $8, $4, $5 ) }' ${SCC_WWW}/All/scc-summary.data	|
+	# "general_data":<host>:<model>:<os>:<release>:<last_day>:<last_time>:<domain>:<runtime>:<size>:<virtualization>:<label>
+	awk -F: '{ printf( "%s:%s:%s:%s:%s\n", $2, $8, $4, $5, $12 ) }' ${SCC_WWW}/All/scc-summary.data	|
 	while read data
 	do
 		# 2: Produce matching actions from config file
 
-		#data is: host:domain:os:release
+		#data is: host:domain:os:release:label
 		# Catch awk-messages and report them at the end.
 		awk -F:	'/^[ 	]*#/	{ next }
 			/^[ 	]*$/	{ next }
 					{
 						# Syntax of this file is:
-						# <action>:<hostname>:<domain>:<OS>:<OS-release>
-						pattern = sprintf( "^%s:%s:%s:%s$", $2, $3, $4, $5 )
+						# <action>:<hostname>:<domain>:<OS>:<OS-release>:<label>
+						pattern = sprintf( "^%s:%s:%s:%s:%s$", $2, $3, $4, $5, $6 )
 						if ( p ~ pattern )
 						{
 							cnt = split( p, parts, ":" )

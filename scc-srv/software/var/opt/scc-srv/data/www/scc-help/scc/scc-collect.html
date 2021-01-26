@@ -17,7 +17,7 @@
 <H2> RELEASE</H2>
 <PRE>
 
-	scc	1.25.35
+	scc	1.26.73
 
 </PRE>
 <H2> SYNOPSIS</H2>
@@ -60,6 +60,8 @@
 	output of the module is stored in a file that is added to the snapshot
 	for later calls of this script (to avoid changes in the logbook).
 	User module data is kept in /var/opt/scc/data/plugin_data/&lt;module&gt;.
+	The data of the first run of a user module is ignored when generating
+	the logbook (refer to scc-cmp).
 
 	When a user module requires additional arguments, the -a option
 	can be used. Note that each started user module is started with
@@ -221,7 +223,7 @@
 <H2> VERSION</H2>
 <PRE>
 
-	$Revision: 6232 $
+	$Revision: 6305 $
 
 </PRE>
 </BODY></HTML>

@@ -11,13 +11,13 @@
 <H2> NAME</H2>
 <PRE>
 
-	scc-plugin - template for a user module
+	scc-plugin - template for a user or system module
 
 </PRE>
 <H2> RELEASE</H2>
 <PRE>
 
-	scc	1.25.35
+	scc	1.26.73
 
 </PRE>
 <H2> SYNOPSIS</H2>
@@ -29,12 +29,17 @@
 <H2> DESCRIPTION</H2>
 <PRE>
 
-	This program can be used as a starting point to write user modules
+	This program can be used as a starting point to write new modules
 	for SCC. To extend the collection of data by scc-collect, copy this
 	script to the directory /opt/scc/bin/scc_modules and name it
-	scc_9999_u_NAME, where 9999 is a four-digit number specifying the
+	scc_9999_[us]_NAME, where 9999 is a four-digit number specifying the
 	order in which scc-collect executes the modules. Refer to the manual
 	page of scc-collect for more details concerning modules.
+
+	A user module (_u_) is not run by default, it requires the -e option
+	of scc. A system module (_s_) is run by default, also during
+	pre- and post-install. A user module is meant for long running commands.
+	Module scc_0700_u_hp_ovou_srv is an example that can take 15 to 30 minutes.
 
 	Data should be produced on stdout. Refer to <A HREF="scc-4.html">scc(4)</A> for a description
 	of the layout of the data in a snapshot.
@@ -84,8 +89,6 @@
 
 	/opt/scc/bin/scc_modules - directory for modules
 	/var/opt/scc/data - directory for data files
-	/var/opt/scc/data/plugin_data - directory checked by scc-log
-		for output of modules
 
 </PRE>
 <H2> SEE ALSO</H2>
@@ -98,7 +101,7 @@
 <H2> VERSION</H2>
 <PRE>
 
-	$Revision: 6232 $
+	$Revision: 6305 $
 
 </PRE>
 </BODY></HTML>

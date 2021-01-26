@@ -8,16 +8,22 @@
 
 
 
-1mNAME0m
+</PRE>
+<H2> NAME</H2>
+<PRE>
        scc - file formats used by SCC
 
 
-1mRELEASE0m
-       scc  1.25.35
+</PRE>
+<H2> RELEASE</H2>
+<PRE>
+       scc  1.26.73
 
 
-1mDESCRIPTION0m
-       SCC  stores  configuration data from systems in flat files called snap‐
+</PRE>
+<H2> DESCRIPTION</H2>
+<PRE>
+       SCC  stores  configuration data from systems in flat files called snap-
        shots. All configuration data is structured  by	prefixing  it  with  a
        fixed-variable  indication and with a hierarchical classification.  The
        indication, all elements of the classification  and  the	 configuration
@@ -28,8 +34,10 @@
        also consist of colon separated fields.
 
 
-1mSNAPSHOTS0m
-       The contents of the file /var/adm/cron/cron.allow are stored in a snap‐
+</PRE>
+<H2> SNAPSHOTS</H2>
+<PRE>
+       The contents of the file /var/adm/cron/cron.allow are stored in a snap-
        shot in the following way:
 
 	  fix:software:cron:configuration::/var/adm/cron/cron.allow:root
@@ -38,29 +46,31 @@
 
 
        After the indicator "fix" for fixed data, there is at least  one	 level
-       of  hierarchical classifications of the remaining data. The classifica‐
+       of  hierarchical classifications of the remaining data. The classifica-
        tion and the data are separated by two consecutive colons.
 
        When this file is altered (uucp should not run cron-jobs), the  missing
        line is reported in the logbook.	 The reported data contains the change
-       itself (uucp)  and  the	classification	of  the	 altered  data	(soft‐
-       ware:cron:configuration::/var/adm/cron/cron.allow:).  Without the clas‐
+       itself (uucp)  and  the	classification	of  the	 altered  data	(soft-
+       ware:cron:configuration::/var/adm/cron/cron.allow:).  Without the clas-
        sification SCC only could have reported that a user has been removed.
 
 
-1mCLASSIFICATIONS0m
+</PRE>
+<H2> CLASSIFICATIONS</H2>
+<PRE>
        For some items help info is generated, that is  prefixed	 with  "hlp:".
-       During  the collection process, statistics are generated, that are pre‐
+       During  the collection process, statistics are generated, that are pre-
        fixed with "stats:".
 
        The output of scc-collect is checked by scc-log. Any line that does not
        start  with  "fix:",  "var:",  "hlp:"  or  "stats:"  is	prefixed  with
        "fix:messages::", indicating unexpected output from one of the commands
        used  by scc-collect.  As the html-file groups data per classification,
-       the original snapshot has to be inspected to locate the commands	 caus‐
+       the original snapshot has to be inspected to locate the commands	 caus-
        ing this output.
 
-       The snapshot is converted to a hierarchical menu. Therefore the follow‐
+       The snapshot is converted to a hierarchical menu. Therefore the follow-
        ing combination of classifications cannot be used:
 
 	  fix:software:myprogram::
@@ -74,11 +84,13 @@
 
        It  is  the  responsibility  of the developer to ensure a correct menu-
        structure by using the correct classifications in  scc-collect  and  in
-       the plugins.  This kind of errors is detected and reported in the snap‐
+       the plugins.  This kind of errors is detected and reported in the snap-
        shot by scc-collect.
 
 
-1mLOGBOOK0m
+</PRE>
+<H2> LOGBOOK</H2>
+<PRE>
        Two consecutive snapshots are compared using diff. The resulting output
        is altered to indicate the old and the new configuration. When the user
        uucp is removed from cron.allow, the following data  is	added  to  the
@@ -111,8 +123,10 @@
        the numner of detected changes.
 
 
-1mKEEP-FILE0m
-       The  keep-file is used to store data that is obtained from running pro‐
+</PRE>
+<H2> KEEP-FILE</H2>
+<PRE>
+       The  keep-file is used to store data that is obtained from running pro-
        cesses, that might not be running during the next run of scc.  To avoid
        changes	in  the	 logbook  any time such a process temporarily does not
        run, the obtained data is stored in a keep-file.	 scc-collect uses  the
@@ -132,19 +146,25 @@
        SCC is unable to record its own upgrade on a RPM-system.
 
 
-1mCOPYRIGHT0m
+</PRE>
+<H2> COPYRIGHT</H2>
+<PRE>
        SCC is free software under the terms of the GNU General Public License.
-       Copyright (C) 2001-2004 Open Challenge B.V., 2004-2005 OpenEyeT Profes‐
+       Copyright (C) 2001-2004 Open Challenge B.V., 2004-2005 OpenEyeT Profes-
        sional Services, 2005-2018 QNH, 2019 Siem Korteweg.
 
 
-1mSEE ALSO0m
+</PRE>
+<H2> SEE ALSO</H2>
+<PRE>
        <A HREF="scc.html">scc(1)</A>, <A HREF="scc-cmp.html">scc-cmp(1)</A>, <A HREF="scc-collect.html">scc-collect(1)</A>, <A HREF="scc-log.html">scc-log(1)</A>, <A HREF="scc-log2html.html">scc-log2html(1)</A>,
        <A HREF="scc-plugin.html">scc-plugin(1)</A>, <A HREF="scc-snap2html.html">scc-snap2html(1)</A>, <A HREF="scc-4.html">scc(4)</A>, <A HREF="scc-5.html">scc(5)</A>
 
 
-1mVERSION0m
-       $Revision: 6232 $
+</PRE>
+<H2> VERSION</H2>
+<PRE>
+       $Revision: 6305 $
 
 
 

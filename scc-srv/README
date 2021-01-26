@@ -1,11 +1,24 @@
 This file describes the hierarchy of the source tarball when it is unpacked.
-Note that the sourceforge SVN hierarchy differs from the hierarchy in the source tarball.
+Note that the sourceforge SVN hierarchy differs from the hierarchy in this source tarball.
 
-The source tarball hierarchy can be used to install the software by means of the command:
+This directory contains the scripts to produce packaged scc-srv. Directory 'install'
+contains the pre- and post-install scripts. Directory 'software' contains the
+hierarchy of the installable scripts of scc-srv.
+
+Please refer to file software/opt/scc/doc/README for details of the installation
+and use of scc.
+
+The source tarball hierarchy can be used to install an unpackaged version of the
+software by means of the command:
 
 	./scc-srv-install
 
-It can also be used to customize the software before packaging it.
+Please note that this copies the files from the software/opt/scc-srv hierarchy 
+to /opt/scc-srv. The indicated version in the html summaries and 'rpm -q scc' 
+or 'pkginfo -l scc' will differ. Correct this by again installing a packaged 
+version of scc-srv.
+
+This directory can also be used to customize the software before packaging it.
 The packaging can be done with the following programs (in alphabetical order):
 
 	- debian-gen-scc-srv		DEB for Debian

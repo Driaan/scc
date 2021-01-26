@@ -2,7 +2,7 @@
 
 # Generate all packages for SCC server.
 # Copyright (C) 2010-2018 QNH.
-# Copyright (C) 2019 Siem Korteweg.
+# Copyright (C) 2019-2020 Siem Korteweg.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 #
 # Contact information: https://sourceforge.net/projects/sysconfcollect/support
 
-# SCC-release: 1.19.44
-# ID:          $Id: scc-srv_gen_all 6217 2019-03-22 18:46:12Z siemkorteweg $
+# SCC-release: 1.20.33
+# ID:          $Id: scc-srv_gen_all 6315 2020-05-03 19:32:55Z siemkorteweg $
 
 # This program requires to be called in a directory with the following hierarchy:
 #
@@ -40,6 +40,7 @@
 # - call this script with new version as argument
 #   be aware of the limitations of the version format for certain types of packages
 # - the directory "packages" contains all produced software packages
+cd $(dirname $0)
 
 TESTING="testing"
 x="$(echo "${TESTING}" 2>/dev/null)"
@@ -68,7 +69,7 @@ then
 	exit 2
 fi
 
-VERSION=${1:-1.19.44}
+VERSION=${1:-1.20.33}
 
 TARGET=packages
 rm -rf ${TARGET}

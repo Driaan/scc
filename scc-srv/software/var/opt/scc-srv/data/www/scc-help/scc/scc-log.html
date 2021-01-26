@@ -17,7 +17,7 @@
 <H2> RELEASE</H2>
 <PRE>
 
-	scc	1.25.35
+	scc	1.26.73
 
 </PRE>
 <H2> SYNOPSIS</H2>
@@ -202,6 +202,15 @@
 	Check the temporary files of scc-collect to determine the cause of the failure or
 	set environment variable SCC_DEBUG and call scc-collect with the -i option.
 
+	During the pre-install phase of the source install, the system is checked for a
+	packaged install of scc. This situation will work at the cost of different output 
+	from the --version option of scc and the output from &#39;rpm -q&#39; or &#39;pkginfo -l&#39;.
+	When an installed package scc is detected, the following warning is shown:
+
+	  WARNING: mixing source and package installs
+
+	Correct this by installing a packaged version of scc.
+
 </PRE>
 <H2> EXTERNAL INFLUENCES</H2>
 <PRE>
@@ -274,7 +283,7 @@
 <H2> VERSION</H2>
 <PRE>
 
-	$Revision: 6232 $
+	$Revision: 6305 $
 
 </PRE>
 </BODY></HTML>

@@ -4,7 +4,7 @@
 # Copyright (C) 2001-2004 Open Challenge B.V.
 # Copyright (C) 2004-2005 OpenEyeT Professional Services.
 # Copyright (C) 2005-2018 QNH.
-# Copyright (C) 2019 Siem Korteweg.
+# Copyright (C) 2019-2020 Siem Korteweg.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,8 @@
 #
 # Contact information: https://sourceforge.net/projects/sysconfcollect/support
 
-# SCC-release: 1.19.44
-# ID:          $Id: scc-transfer 6217 2019-03-22 18:46:12Z siemkorteweg $
+# SCC-release: 1.20.33
+# ID:          $Id: scc-transfer 6315 2020-05-03 19:32:55Z siemkorteweg $
  
  
 
@@ -495,10 +495,11 @@ scc_data_to_site()
 	return 0
 }
 
-SYNTAX="Syntax error, use: ${ProgName} [ -m|--minimal ] [ -u|--unpacked <host> ] [ -e|--encrypted ] [ -l|--log <log> ] [ -s|--source <src_dir> ] [ <dest_dir> ]"
+SYNTAX="Syntax error, use: ${ProgName} [ -m|--minimal ] [ -u|--unpacked <host> ] [ -e|--encrypted ] [ -l|--log <log> ] [ -L|--label <label> ] [ -s|--source <src_dir> ] [ <dest_dir> ]"
 
 MISSING_OPT_ARG="${ProgName}: Syntax error, missing argument for option:"
 logfile=${SCC_LOG}/scc-transfer.log
+label=""
 decrypt_content=0
 minimal=""
 unpacked_host=""
@@ -518,6 +519,10 @@ do
 	-l|--log)	[ -z "${2:-}" ] && echo "${MISSING_OPT_ARG}: ${1}" >&2 && exit 1
 			logfile=$2
 			touch ${logfile}	# when log file is specified, make sure that it exist to start logging
+			shift 2;;
+
+	-L|--label)	[ -z "${2:-}" ] && echo "${MISSING_OPT_ARG}: ${1}" >&2 && exit 1
+			label="$(echo "${2}" | sed -e 's/[^a-zA-Z0-9_-]//g')"		# same restrictions as in scc-log
 			shift 2;;
 
 	-s|--source)	[ -z "${2:-}" ] && echo "${MISSING_OPT_ARG}: ${1}" >&2 && exit 1
@@ -602,6 +607,10 @@ then
 			echo "fix:general::domain:${d_n}"
 			echo "var:general::date:${now_date}"
 			echo "var:general::start time:${now_time}"
+			if [ "${label}" ]
+			then
+				echo "fix:general::label:${label}"
+			fi
 		} >scc.${h_n}.cur
 		echo "${now_date}:${now_time}:result::(re)start"	>  scc.${h_n}.log
 

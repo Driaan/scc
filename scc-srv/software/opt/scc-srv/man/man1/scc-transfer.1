@@ -10,13 +10,14 @@
 .SH  RELEASE
 .nf
 
-	scc-srv	1.19.44
+	scc-srv	1.20.33
 
 .SH  SYNOPSIS
 .nf
 
 	scc-transfer [ -m|--minimal ] [ -u|--unpacked <host> ] [ -e|--encrypted ]
-	             [ -l|--log <log> ] [ -s|--source <src_dir> ] [ <dest_dir> ]
+	             [ -l|--log <log> ] [ -L|--label <label> ]
+	             [ -s|--source <src_dir> ] [ <dest_dir> ]
 
 .SH  DESCRIPTION
 .nf
@@ -60,6 +61,8 @@
 	-l|--log <log>          the file for log-messages; default log file is
 	                        /var/opt/scc-srv/data/log/scc-transfer.log
 	                        logging is only enabled when this file exists
+	-L|--label <label>      Used with -m option to indicate the label used in
+	                        auto-realm-conf to ssign systems to realms.
 	-s|--source <src_dir>   Source directory for the transfer, default
 	                        directory is: /var/opt/scc-srv/data/transfer
 	                        SCC data should be in subdirectory 'cp' or 'mail'
@@ -80,7 +83,8 @@
 	The program issues the following messages to the stderr:
 
 	Syntax error, use: scc-transfer [ -m|--minimal ] [ -u|--unpacked <host> ]
-	        [ -e|--encrypted ] [ -l|--log <log> ] [ -s|--source <src_dir> ] [ <dest_dir> ]
+	        [ -e|--encrypted ] [ -l|--log <log> ] [-L|--label <label> ]
+	        [ -s|--source <src_dir> ] [ <dest_dir> ]
 	A syntax error has been detected and reported.
 
 	scc-transfer: Syntax error, missing argument for option: <option>
@@ -223,7 +227,7 @@
 
 	scc-transfer is free software under the terms of the GNU General Public 
 	License. Copyright (C) 2001-2004 Open Challenge B.V.,
-	2004-2005 OpenEyeT Professional Services, 2005-2018 QNH, 2019 Siem Korteweg.
+	2004-2005 OpenEyeT Professional Services, 2005-2018 QNH, 2019-2020 Siem Korteweg.
 
 .SH  FILES
 .nf
@@ -248,5 +252,5 @@
 .SH  VERSION
 .nf
 
-	$Revision: 6217 $
+	$Revision: 6315 $
 

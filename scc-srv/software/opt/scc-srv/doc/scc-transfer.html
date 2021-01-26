@@ -14,14 +14,15 @@
 <H2> RELEASE</H2>
 <PRE>
 
-	scc-srv	1.19.44
+	scc-srv	1.20.33
 
 </PRE>
 <H2> SYNOPSIS</H2>
 <PRE>
 
 	scc-transfer [ -m|--minimal ] [ -u|--unpacked &lt;host&gt; ] [ -e|--encrypted ]
-	             [ -l|--log &lt;log&gt; ] [ -s|--source &lt;src_dir&gt; ] [ &lt;dest_dir&gt; ]
+	             [ -l|--log &lt;log&gt; ] [ -L|--label &lt;label&gt; ]
+	             [ -s|--source &lt;src_dir&gt; ] [ &lt;dest_dir&gt; ]
 
 </PRE>
 <H2> DESCRIPTION</H2>
@@ -67,6 +68,8 @@
 	-l|--log &lt;log&gt;          the file for log-messages; default log file is
 	                        /var/opt/scc-srv/data/log/scc-transfer.log
 	                        logging is only enabled when this file exists
+	-L|--label &lt;label&gt;      Used with -m option to indicate the label used in
+	                        auto-realm-conf to ssign systems to realms.
 	-s|--source &lt;src_dir&gt;   Source directory for the transfer, default
 	                        directory is: /var/opt/scc-srv/data/transfer
 	                        SCC data should be in subdirectory &#39;cp&#39; or &#39;mail&#39;
@@ -89,7 +92,8 @@
 	The program issues the following messages to the stderr:
 
 	Syntax error, use: scc-transfer [ -m|--minimal ] [ -u|--unpacked &lt;host&gt; ]
-	        [ -e|--encrypted ] [ -l|--log &lt;log&gt; ] [ -s|--source &lt;src_dir&gt; ] [ &lt;dest_dir&gt; ]
+	        [ -e|--encrypted ] [ -l|--log &lt;log&gt; ] [-L|--label &lt;label&gt; ]
+	        [ -s|--source &lt;src_dir&gt; ] [ &lt;dest_dir&gt; ]
 	A syntax error has been detected and reported.
 
 	scc-transfer: Syntax error, missing argument for option: &lt;option&gt;
@@ -236,7 +240,7 @@
 
 	scc-transfer is free software under the terms of the GNU General Public 
 	License. Copyright (C) 2001-2004 Open Challenge B.V.,
-	2004-2005 OpenEyeT Professional Services, 2005-2018 QNH, 2019 Siem Korteweg.
+	2004-2005 OpenEyeT Professional Services, 2005-2018 QNH, 2019-2020 Siem Korteweg.
 
 </PRE>
 <H2> FILES</H2>
@@ -264,7 +268,7 @@
 <H2> VERSION</H2>
 <PRE>
 
-	$Revision: 6217 $
+	$Revision: 6315 $
 
 </PRE>
 </BODY></HTML>

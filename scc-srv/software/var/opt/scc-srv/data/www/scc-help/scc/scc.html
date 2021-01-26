@@ -17,7 +17,7 @@
 <H2> RELEASE</H2>
 <PRE>
 
-	scc	1.25.35
+	scc	1.26.73
 
 </PRE>
 <H2> SYNOPSIS</H2>
@@ -57,8 +57,10 @@
 
 	When a specific user module requires much time, you can run
 	it less frequent. The data from the last run of the module is
-	kept in the directory /var/opt/scc/data/plugin_data. Suppose
-	you have three user modules, named:
+	kept in file /var/opt/scc/data/plugin_data/&lt;module&gt; and inserted
+	into the snapshot when the user module is not selected to run.
+
+	Suppose you have three user modules, named:
 
 		scc_0550_u_abc
 		scc_0650_u_def
@@ -372,6 +374,7 @@
 	When rcp/scp are used, the file scc.&lt;hostname&gt;.signal is used to
 	indicate the completed transfer of the scc-data on the server.
 	- /var/opt/scc/data/transfer - directory for pull and transfer
+	- /var/opt/scc/data/plugin_data/&lt;module&gt; - output of user module
 
 </PRE>
 <H2> SEE ALSO</H2>
@@ -384,7 +387,7 @@
 <H2> VERSION</H2>
 <PRE>
 
-	$Revision: 6232 $
+	$Revision: 6305 $
 
 </PRE>
 </BODY></HTML>
