@@ -50,6 +50,7 @@
 ./software/opt/scc/bin/scc_modules/scc_0900_s_system
 ./software/opt/scc/bin/scc_modules/scc_1000_s_users
 ./software/opt/scc/bin/scc_modules/scc_1100_s_openstack
+./software/opt/scc/bin/scc_modules/scc_1200_s_proxmox
 ./software/opt/scc/bin/scc_modules/scc_9999_s_perms
 ./software/opt/scc/bin/scc_modules/scc_utils
 ./software/opt/scc/bin/scc-plugin
