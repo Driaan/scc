@@ -1,32 +1,31 @@
 # SCC (SysConfCollect)
 
-All the related scripts and files to install and manage SCC on both server and client environments.
+The source code for SCC (SysConfCollect) on both server and client environments.
+
+## Releases
+
+Releases are automatically built and published via GitHub Actions to this repository.
 
 ## Compiling
 
-To compile (for debian) execute the following scripts:
+To manually compile (tested on debian) execute the following scripts:
 
 ```shell script
 # scc
-sudo bash scc-src/scc_gen_all 1.26.73-rsync
+sudo bash scc/scc_gen_all 1.31.0-rsync-proxmox
 # scc-srv
-sudo bash scc-srv-src/scc-srv_gen_all 1.20.33-rsync
+sudo bash scc-srv/scc-srv_gen_all 1.31.0-rsync-proxmox
 ```
 
-## Github flow publishes builds committed to master to the following locations:
+# Configuration
+
+## scc-srv rsync
+
+
 
 ```shell script
-scc:        https://raw.githubusercontent.com/Driaan/hosting/master/scc_1.30.00-1_all.deb
-scc-srv:    https://raw.githubusercontent.com/Driaan/hosting/master/scc-srv_1.30.00-1_all.deb
-```
+# /etc/rsyncd.conf
 
-## Configuration
-
-#### scc-srv
-
-##### /etc/rsyncd.conf
-
-```shell script
 lock file = /var/run/rsync.lock
 log file = /var/log/rsyncd.log
 pid file = /var/run/rsyncd.pid
@@ -42,61 +41,62 @@ secrets file = /etc/rsyncd.scc.secrets
 post-xfer exec = /opt/scc-srv/bin/scc-update
 ```
 
-## Commands
+# Usage
 
-#### Updating scc
+### Updating scc
 
 ```shell script
 /opt/scc-srv/bin/scc-update -f
 ```
 
-#### Adding a new realm
+### Adding a new realm
 
 ```shell script
 /opt/scc-srv/bin/scc-realm -a $REALM_NAME
 ```
 
-#### Deleting a realm
+### Deleting a realm
 
 ```shell script
 /opt/scc-srv/bin/scc-realm -d $REALM_NAME
 ```
 
-#### Adding hosts to realm
+### Adding hosts to realm
 
 ```shell script
 scc-realm --add --quick --list $HOST_1 $REALM_NAME # do not call scc-update, manually call /opt/scc-srv/bin/scc-update -f
 scc-realm --add --list $HOST_1,$HOST_2 $REALM_NAME
 ```
 
-##### Renaming a realm
+### Renaming a realm
 
 ```shell script
 /opt/scc-srv/bin/scc-update -r $OLD_REALM_NAME $NEW_REALM_NAME
 ```
 
-##### Archiving hosts
+### Archiving hosts
 
 ```shell script
 /opt/scc-srv/bin/scc-realm --archive /<dir>/archive --list $HOST_1,$HOST_2 --delete All
 ```
 
-## Security
+# Security
 
-#### Adding user:password to realm via .htpasswd
+## Adding user:password to realm via .htpasswd
 
-Generating password: https://hostingcanada.org/htpasswd-generator/
+You can generate a password hash using https://hostingcanada.org/htpasswd-generator/
 
 ```shell script
-# driaan:123qwe
+# user1:123qwe
+# user2:123qwe
 
 sudo tee -a /var/opt/scc-srv/data/www/.htpasswd > /dev/null <<EOT
-driaan:{SHA}Bf50YcYHwzIpdy1AJQVgEBan0Oo=
-hendrik:{SHA}3HJK8Y+91OWRifX+dopfgxFScFA=
+user1:{SHA}Bf50YcYHwzIpdy1AJQVgEBan0Oo=
+user2:{SHA}Bf50YcYHwzIpdy1AJQVgEBan0Oo=
 EOT
 ```
 
-#### Adding folder protection via .htaccess
+## Adding folder protection via .htaccess
 
 ```shell script
 sudo tee -a /var/opt/scc-srv/data/www/$REALM_NAME/.htaccess > /dev/null <<EOT
@@ -111,7 +111,7 @@ EOT
 
 Note: allowing users without needing groups: "Require valid-user"
 
-#### Adding group protection via .htgroups
+## Adding group protection via .htgroups
 
 Activating apache2 authz_groupfile
 
@@ -120,35 +120,14 @@ a2enmod authz_groupfile
 systemctl restart apache2
 ```
 
-Groups File:
+### Groups File:
 
 ```shell script
 # /var/opt/scc-srv/data/www/.htgroups
+
 $GROUP_NAME: $GROUP_USER_1 $GROUP_USER_2 $GROUP_USER_3
 
 example:
-admin: driaan hendrik
+admin: user1 user2
 paythem: user_1 user_2
-```
-
-## Misc
-
-```bash
-
-
-
-find the related scripts in /scripts
-
-older notes:
-
-man rsyncd.conf
-refuse options = in-plcae
-
-post-xfer exec
-
-refuse partial
-
-as a test use --partial on big file and break its progress. have a look at whats been copied.
-need to double check that it is stored as hidden, unique partial files.
-
 ```
