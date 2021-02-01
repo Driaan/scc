@@ -1,0 +1,12 @@
+#!/bin/bash
+
+sudo useradd -m scc
+sudo mkdir ~scc/.ssh
+cat << EOFF | sudo tee ~scc/.ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBQVwL6zDpw5a+oBDZY17HV5CzwuVzbK7nVMnw0Ddcqkkv77Y/JyWy1FNG51HUResCAhl4Lymq8APD3tROGHDPeUnutRqnkDYAzjUwkKQgHdVZRv0sp/5kkuMU030KG7pENT1gshjws0b1rB0cDPm+tfpP52p8atUExVyT34VhSeOaecPTx7rtPPiHIZ3cYqI7IQDlYFsYRaw2Zjo0aVdetkqkD4ZSsr8obeu3MZAApoqdjCs+9hXeSuTvs085fyuDj95QHtrDL1vp79dQANwXUtvDfVzBVptchH2cnUcYsJFUQW7h1qQq45ZGQ0xn1IzuqT5DlL6EGlJECeIvcjEaiYqnVACPjCNVP3wDtMcQ4KCZBw2gyVOyG3D0/q5880stW9Jf4ZOHWwXPPSjBQaz2J/rfEB6TrK15DadfeKTN6KCCoz51DTS3ocDaADiPg63kUAhO5C8vyIcPWPjlztqjM5ZRJBx+02b3Bu+/L62qJiizH2lpsutP4s1SPXIjhL5tFYpX1EiluIJEi4ef9r9VUxQT6mJMF52WG+3/tisIgUF/OK8GfcvGgMabX10KHdPUFm0c4q/PhO70RUEdqVKs2N4b+zHDBiRrZ8R/yahBhMxCEZChOJ/1AxID3hhf49MPKZ0hACRhm9/AsKz/exLKqL8JmCTYZjrbBkfokkveWQ== New Support 2019
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEHbaC0U7VHZ/HadGxTATNOE1c6oOjjYaq87uxCORiD/ ed hv support
+EOFF
+sudo chmod 0644 ~scc/.ssh/authorized_keys
+sudo chown -R scc:scc ~scc
+echo "scc ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/011_scc_nopass
+usermod --shell /bin/bash scc
